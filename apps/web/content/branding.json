@@ -1,0 +1,28 @@
+{
+  "topBar": {
+    "phone": "(+00) 000 0000000"
+  },
+  "footer": {
+    "contacts": [
+      {
+        "icon": "Phone",
+        "text": "(+00) 000 0000000"
+      },
+      {
+        "icon": "Smartphone",
+        "text": "(+00) 000 0000000"
+      },
+      {
+        "icon": "Mail",
+        "text": "hello@example.com"
+      }
+    ],
+    "social": {
+      "heading": "Latest Tweets",
+      "body": "Follow us for the latest updates on products and style."
+    },
+    "copyright": {
+      "year": 2026
+    }
+  }
+}

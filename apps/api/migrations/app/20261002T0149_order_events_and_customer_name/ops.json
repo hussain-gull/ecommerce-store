@@ -1,0 +1,191 @@
+[
+  {
+    "id": "table.order_events",
+    "label": "Create table \"order_events\"",
+    "summary": "Creates table \"order_events\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "order_events"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"order_events\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"order_events\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"order_events\"",
+        "sql": "CREATE TABLE \"public\".\"order_events\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"order_id\" text NOT NULL,\n  \"status\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"order_events\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"order_events\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.customer_name",
+    "label": "Add column \"customer_name\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "customer_name",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"customer_name\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "customer_name"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"customer_name\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"customer_name\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"customer_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "customer_name"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.order_events.order_events_order_id_idx_39ad19ad",
+    "label": "Create index \"order_events_order_id_idx_39ad19ad\" on \"order_events\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "order_events_order_id_idx_39ad19ad",
+        "table": "order_events"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"order_events_order_id_idx_39ad19ad\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"order_events_order_id_idx_39ad19ad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"order_events_order_id_idx_39ad19ad\"",
+        "sql": "CREATE INDEX \"order_events_order_id_idx_39ad19ad\" ON \"public\".\"order_events\" (\"order_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"order_events_order_id_idx_39ad19ad\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"order_events_order_id_idx_39ad19ad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.order_events.order_events_order_id_fkey",
+    "label": "Add foreign key \"order_events_order_id_fkey\" on \"order_events\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "order_events_order_id_fkey",
+        "table": "order_events"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"order_events_order_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_events_order_id_fkey",
+          "public",
+          "\"public\".\"order_events\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"order_events_order_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"order_events\"\nADD CONSTRAINT \"order_events_order_id_fkey\"\nFOREIGN KEY (\"order_id\")\nREFERENCES \"public\".\"orders\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"order_events_order_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_events_order_id_fkey",
+          "public",
+          "\"public\".\"order_events\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.orders-customer-name-and-events-backfill",
+    "label": "Data transform: backfill orders.customer_name and order_events",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Backfill orders.customer_name",
+        "sql": "UPDATE \"public\".\"orders\" SET \"customer_name\" = concat_ws(' ', \"ship_address\"->>'firstName', \"ship_address\"->>'lastName')",
+        "params": []
+      },
+      {
+        "description": "Seed order_events with the placement event",
+        "sql": "INSERT INTO \"public\".\"order_events\" (\"id\", \"order_id\", \"status\", \"created_at\") SELECT gen_random_uuid()::text, \"id\", 'pending', \"created_at\" FROM \"public\".\"orders\"",
+        "params": []
+      },
+      {
+        "description": "Seed order_events with the current status when it moved on",
+        "sql": "INSERT INTO \"public\".\"order_events\" (\"id\", \"order_id\", \"status\", \"created_at\") SELECT gen_random_uuid()::text, \"id\", \"status\", \"created_at\" + interval '1 second' FROM \"public\".\"orders\" WHERE \"status\" <> 'pending'",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  }
+]

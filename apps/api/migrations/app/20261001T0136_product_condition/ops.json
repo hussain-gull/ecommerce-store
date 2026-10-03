@@ -1,0 +1,125 @@
+[
+  {
+    "id": "column.public.products.condition_id",
+    "label": "Add column \"condition_id\" to \"products\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "condition_id",
+        "table": "products"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"condition_id\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "products",
+          "condition_id"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"condition_id\"",
+        "sql": "ALTER TABLE \"public\".\"products\" ADD COLUMN \"condition_id\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"condition_id\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "products",
+          "condition_id"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.products.products_condition_id_idx_596457aa",
+    "label": "Create index \"products_condition_id_idx_596457aa\" on \"products\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "products_condition_id_idx_596457aa",
+        "table": "products"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"products_condition_id_idx_596457aa\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"products_condition_id_idx_596457aa\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"products_condition_id_idx_596457aa\"",
+        "sql": "CREATE INDEX \"products_condition_id_idx_596457aa\" ON \"public\".\"products\" (\"condition_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"products_condition_id_idx_596457aa\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"products_condition_id_idx_596457aa\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.products.products_condition_id_fkey",
+    "label": "Add foreign key \"products_condition_id_fkey\" on \"products\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "products_condition_id_fkey",
+        "table": "products"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"products_condition_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "products_condition_id_fkey",
+          "public",
+          "\"public\".\"products\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"products_condition_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"products\"\nADD CONSTRAINT \"products_condition_id_fkey\"\nFOREIGN KEY (\"condition_id\")\nREFERENCES \"public\".\"filter_options\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"products_condition_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "products_condition_id_fkey",
+          "public",
+          "\"public\".\"products\""
+        ]
+      }
+    ]
+  }
+]

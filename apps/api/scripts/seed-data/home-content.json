@@ -1,0 +1,79 @@
+{
+  "hero": {
+    "eyebrow": "Football Performance Collection",
+    "heading": "BUILT FOR THE PITCH.",
+    "body": "Engineered for elite performance on every surface. Precision-crafted boots for the modern footballer — from firm-ground dominance to all-weather control.",
+    "primaryCta": "Shop Now",
+    "secondaryCta": "View Collection",
+    "badge": "New Season",
+    "stats": [
+      {
+        "value": "10K+",
+        "label": "Players"
+      },
+      {
+        "value": "48hr",
+        "label": "Delivery"
+      },
+      {
+        "value": "4.9★",
+        "label": "Rating"
+      }
+    ],
+    "imageUrl": "https://placehold.co/1600x900/webp?text=Replace+me"
+  },
+  "ticker": "PRECISION · CONTROL · POWER · SPEED · FIRM GROUND · SOFT GROUND · ARTIFICIAL GRASS · FOOTBALL PERFORMANCE · ",
+  "categorySection": {
+    "eyebrow": "Shop by Ground Type",
+    "heading": "Choose Your Ground",
+    "categories": [
+      {
+        "code": "FG",
+        "label": "Firm Ground",
+        "tagline": "Dominate Every Surface",
+        "desc": "Maximum traction on natural grass. Our FG range delivers explosive acceleration and pin-point precision."
+      },
+      {
+        "code": "SG",
+        "label": "Soft Ground",
+        "tagline": "Elite Wet Performance",
+        "desc": "Built for muddy, wet conditions. Metal studs engineered for deep penetration and unrivalled stability."
+      },
+      {
+        "code": "AG",
+        "label": "Artificial Grass",
+        "tagline": "All-Surface Control",
+        "desc": "Optimised for 3G and 4G pitches. High stud count distributes pressure evenly for all-day comfort."
+      }
+    ]
+  },
+  "bestsellers": {
+    "eyebrow": "Top Picks",
+    "heading": "Bestsellers",
+    "viewAllCta": "View All Products"
+  },
+  "stats": [
+    {
+      "value": "10K+",
+      "label": "Players Trust Us"
+    },
+    {
+      "value": "48hr",
+      "label": "Delivery Time"
+    },
+    {
+      "value": "4.9★",
+      "label": "Average Rating"
+    },
+    {
+      "value": "Free",
+      "label": "Returns Policy"
+    }
+  ],
+  "cta": {
+    "eyebrow": "Ready to Perform?",
+    "heading": "Find Your Perfect Boot",
+    "body": "From youth academies to professional pitches, we have the boot for every level of the game.",
+    "ctaText": "Shop the Full Range"
+  }
+}

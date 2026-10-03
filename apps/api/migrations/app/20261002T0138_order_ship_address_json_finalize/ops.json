@@ -1,0 +1,344 @@
+[
+  {
+    "id": "alterNullability.setNotNull.orders.ship_address",
+    "label": "Set NOT NULL on \"orders\".\"ship_address\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_address",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_address\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_address"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"ship_address\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"orders\" WHERE \"ship_address\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"ship_address\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ALTER COLUMN \"ship_address\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_address\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_address",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_city",
+    "label": "Drop column \"ship_city\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_city",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_city\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_city"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_city\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_city\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_city\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_city"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_country",
+    "label": "Drop column \"ship_country\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_country",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_country\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_country"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_country\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_country\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_country\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_country"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_first_name",
+    "label": "Drop column \"ship_first_name\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_first_name",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_first_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_first_name"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_first_name\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_first_name\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_first_name\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_first_name"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_last_name",
+    "label": "Drop column \"ship_last_name\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_last_name",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_last_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_last_name"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_last_name\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_last_name\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_last_name\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_last_name"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_line1",
+    "label": "Drop column \"ship_line1\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_line1",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_line1\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line1"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_line1\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_line1\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_line1\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line1"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_line2",
+    "label": "Drop column \"ship_line2\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_line2",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_line2\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line2"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_line2\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_line2\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_line2\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line2"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.orders.ship_postcode",
+    "label": "Drop column \"ship_postcode\" from \"orders\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_postcode",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_postcode\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_postcode"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"ship_postcode\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" DROP COLUMN \"ship_postcode\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_postcode\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_postcode"
+        ]
+      }
+    ]
+  }
+]

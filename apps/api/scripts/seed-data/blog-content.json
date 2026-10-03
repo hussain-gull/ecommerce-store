@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "Blog — {{storeName}}",
+    "description": "Boot guides, training tips and stories from the pitch — the {{storeName}} journal."
+  },
+  "eyebrow": "The Journal",
+  "heading": "From the Pitch",
+  "intro": "Boot guides, care tips and performance insights from the {{shortName}} team — everything you need to get the most out of every match.",
+  "posts": [
+    {
+      "slug": "choosing-the-right-stud-type",
+      "title": "FG, SG or AG: Choosing the Right Stud Type",
+      "category": "Guides",
+      "author": "{{shortName}} Team",
+      "publishedAt": "2026-09-10",
+      "excerpt": "The wrong soleplate costs you grip, speed and comfort. Here's how to match your boots to the surface you actually play on.",
+      "body": [
+        "Firm-ground (FG) boots are built for dry natural grass. Their moulded studs give explosive traction without sinking too deep into the turf.",
+        "Soft-ground (SG) boots use fewer, longer — often metal — studs that bite into wet, muddy pitches where FG studs would slip.",
+        "Artificial-grass (AG) boots have a high count of short, rounded studs that spread pressure evenly across 3G and 4G surfaces, reducing strain on your joints."
+      ],
+      "media": []
+    },
+    {
+      "slug": "caring-for-your-boots",
+      "title": "Five Habits That Double Your Boots' Lifespan",
+      "category": "Care",
+      "author": "{{shortName}} Team",
+      "publishedAt": "2026-08-22",
+      "excerpt": "A few minutes after every session keeps your boots feeling match-ready for seasons, not months.",
+      "body": [
+        "Knock off mud while it's still wet, then wipe the upper with a damp cloth. Never use a dishwasher or washing machine.",
+        "Stuff your boots with newspaper and let them dry at room temperature — radiators and direct sunlight crack leather and warp soleplates.",
+        "Rotate between two pairs if you train often, and always loosen the laces fully before taking them off."
+      ],
+      "media": []
+    },
+    {
+      "slug": "breaking-in-new-boots",
+      "title": "How to Break In New Boots Without the Blisters",
+      "category": "Tips",
+      "author": "{{shortName}} Team",
+      "publishedAt": "2026-07-30",
+      "excerpt": "New boots should feel snug, not painful. Ease them in gradually and they'll mould to your feet.",
+      "body": [
+        "Start by wearing your new boots around the house for an hour or two with match socks on.",
+        "Next, use them for light training sessions before trusting them for a full ninety minutes.",
+        "If a hot spot appears, tape the area early — prevention is far easier than treating a blister mid-season."
+      ],
+      "media": []
+    }
+  ]
+}

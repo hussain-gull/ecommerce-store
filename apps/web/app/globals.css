@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+@theme {
+  /* Accent (interactive / brand highlight) */
+  --color-accent: #f25862;
+  --color-accent-dark: #d4404a;
+
+  /* Text hierarchy */
+  --color-foreground: #252525; /* headings, strong text, primary button fill */
+  --color-secondary: #6a6a6a; /* body / paragraph text */
+  --color-muted: #aaaaaa; /* icons, dimmed text */
+  --color-subtle: #cccccc; /* faintest / disabled text */
+
+  /* Surfaces & dividers */
+  --color-wash: #f5f5f5; /* light neutral wash (thumbnails, topbar bg) */
+  --color-surface: #f9f9f9; /* card / panel background */
+  --color-line: #eaeaea; /* default border / divider */
+  --color-line-light: #f0f0f0; /* hairline divider */
+
+  /* Component-specific */
+  --color-header: #e5e5e5;
+  --color-overlay: #333333; /* nav dropdowns, dark badge backgrounds */
+  --color-footer: #141414;
+  --color-hero: #1a1a2e;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
+  --shadow-dropdown: 0 4px 12px 0 rgba(0, 0, 0, 0.18);
+  --shadow-sticky: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-sans), sans-serif;
+  background-color: #fff;
+  color: var(--color-secondary);
+  -webkit-font-smoothing: antialiased;
+}

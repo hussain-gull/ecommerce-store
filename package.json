@@ -1,0 +1,32 @@
+{
+  "name": "ecommerce",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write .",
+    "format:check": "prettier --ignore-path .gitignore --ignore-path .prettierignore --check .",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "prettier": "3.9.7",
+    "turbo": "^2.10.12",
+    "typescript": "7.0.2"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": ">=24"
+  },
+  "description": "Full-stack e-commerce platform: Next.js storefront, React admin panel and Express + Prisma API in one Turborepo monorepo.",
+  "license": "MIT",
+  "author": "Hussain-Gull",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hussain-gull/ecommerce-store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hussain-gull/ecommerce-store/issues"
+  },
+  "homepage": "https://github.com/hussain-gull/ecommerce-store#readme"
+}

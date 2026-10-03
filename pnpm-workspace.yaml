@@ -1,0 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  es5-ext: false
+  esbuild: true
+  msgpackr-extract: true
+  tesseract.js: false
+  workerd: true

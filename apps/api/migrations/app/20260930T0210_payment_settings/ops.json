@@ -1,0 +1,41 @@
+[
+  {
+    "id": "table.payment_settings",
+    "label": "Create table \"payment_settings\"",
+    "summary": "Creates table \"payment_settings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "payment_settings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"payment_settings\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment_settings\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"payment_settings\"",
+        "sql": "CREATE TABLE \"public\".\"payment_settings\" (\n  \"account_name\" text NOT NULL,\n  \"account_number\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"qr_image\" text DEFAULT '' NOT NULL,\n  \"support_phone\" text NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"payment_settings\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment_settings\""
+        ]
+      }
+    ]
+  }
+]

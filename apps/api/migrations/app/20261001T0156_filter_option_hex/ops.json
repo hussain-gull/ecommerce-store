@@ -1,0 +1,44 @@
+[
+  {
+    "id": "column.public.filter_options.hex",
+    "label": "Add column \"hex\" to \"filter_options\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "hex",
+        "table": "filter_options"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"hex\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "filter_options",
+          "hex"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"hex\"",
+        "sql": "ALTER TABLE \"public\".\"filter_options\" ADD COLUMN \"hex\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"hex\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "filter_options",
+          "hex"
+        ]
+      }
+    ]
+  }
+]

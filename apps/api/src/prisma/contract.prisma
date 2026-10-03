@@ -1,0 +1,427 @@
+// use prisma-8
+
+
+/// Catalogue products. Owned by the admin panel — customers never write here.
+///
+/// - `id` is UUIDv7 so it matches the `product_id` columns already used by
+///   `cart_items`/`wishlist_items` (time-ordered, no join needed to sort by recency).
+/// - `slug` is unique and is the SEO-facing URL segment (`/products/<slug>`).
+/// - `price`/`sale_price` are `Decimal` — never use floating point for money.
+/// - `is_published` gates storefront visibility: admins can draft a product before
+///   it's live. Public reads always filter `is_published = true`.
+/// - `meta_title`/`meta_description` are optional overrides for the `<title>` /
+///   meta-description tags; the service falls back to `name`/`description` when unset.
+model products {
+  /// UUIDv7 primary key — matches product_id columns in cart_items/wishlist_items.
+  id                String            @id @default(uuid(7))
+  /// Unique only among active rows — see the partial indexes below — so a
+  /// soft-deleted product's slug can be reused by a new one.
+  slug              String
+  name              String
+  description       String
+  /// Base price — Decimal, never a float.
+  price             Decimal
+  /// Optional discounted price; when set the storefront shows it as the sale price.
+  sale_price        Decimal?
+  /// Stock-keeping unit. Unique only among active rows — see the partial indexes below.
+  sku               String
+  category          String
+  brand             String?
+  gender            String?
+  surface           String?
+  /// FK to filter_options (kind="condition"). Null = no condition set.
+  condition_id      String?
+  condition         filter_options? @relation("products_condition", fields: [condition_id], references: [id])
+  tags              String[]
+  /// Draft/live gate — public endpoints only ever read published products.
+  is_published      Boolean           @default(false)
+  meta_title        String?
+  meta_description  String?
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  created_at        TimestamptzString @default(now())
+  updated_at        TimestamptzString @default(now())
+  /// Soft-delete marker — null means active. Set (never row-deleted) by
+  /// deleteProductService; every read service filters `deleted_at: null`.
+  deleted_at        TimestamptzString?
+
+  variants          product_variants[]
+  media             product_media[]
+  order_items       order_items[]
+  cart_items        cart_items[]
+  wishlist_items    wishlist_items[]
+
+  @@index([category])
+  @@index([is_published])
+  @@index([condition_id])
+  /// Partial unique indexes: enforce slug/sku uniqueness only among active
+  /// (non-soft-deleted) rows, so a deleted product's slug/sku can be reused.
+  @@index([slug], unique: true, where: "(deleted_at IS NULL)", name: "products_slug_active_key")
+  @@index([sku], unique: true, where: "(deleted_at IS NULL)", name: "products_sku_active_key")
+}
+
+/// Admin-managed filter taxonomy — one table backs every shop-filter facet the
+/// admin panel can curate: category, brand, surface, size, colour. `kind` picks
+/// the facet; `products.category`/`brand`/`surface` and `product_variants.size`/
+/// `color_name` store the matching option's `slug` as free text (no DB-level FK
+/// — service-layer convention, same as the rest of this contract). `gender` is
+/// deliberately NOT here — it's a fixed 3-value enum ("Men"/"Women"/"Kids") on
+/// `products`/Zod, not an open admin-curated vocabulary.
+model filter_options {
+  id         String            @id @default(uuid(7))
+  kind       String
+  name       String
+  slug       String
+  /// Swatch colour ("#rrggbb") — only meaningful for kind="colour"; null otherwise.
+  hex        String?
+  /// Self-reference to another filter_options row — only meaningful for kind="category",
+  /// where it makes this row a subcategory of the referenced category. Null for top-level
+  /// options and for every other kind.
+  parent_id  String?
+  parent     filter_options?   @relation("filter_options_parent", fields: [parent_id], references: [id])
+  children   filter_options[]  @relation("filter_options_parent")
+  /// Products using this row as their condition (kind="condition" only).
+  products   products[]        @relation("products_condition")
+  created_at TimestamptzString @default(now())
+
+  @@unique([kind, slug])
+  @@unique([kind, name])
+  @@index([kind])
+  @@index([parent_id])
+}
+
+/// Purchasable variants of a product — a concrete size + colour with its own stock count.
+/// Size, colour name and hex are all required (enforced in Zod too): carts and orders
+/// match a variant on (size, colour), so a variant missing either is never sellable.
+/// `color_name` is derived from the hex by the admin colour picker.
+model product_variants {
+  id          String   @id @default(uuid(7))
+  product_id  String
+  product     products @relation(fields: [product_id], references: [id])
+  size        String
+  color_name  String
+  color_hex   String
+  stock       Int      @default(0)
+
+  /// Prevents duplicate size/color rows for the same product.
+  @@unique([product_id, size, color_name])
+  @@index([product_id])
+}
+
+/// Product gallery — images/video, ordered by `position`. Uploaded via the same
+/// Cloudinary pipeline as marketing media (see cloudinary.util.ts), under a
+/// `products/<productId>` folder.
+model product_media {
+  id          String   @id @default(uuid(7))
+  product_id  String
+  product     products @relation(fields: [product_id], references: [id])
+  /// "image" | "video".
+  type        String
+  url         String
+  /// Poster frame for video media; null for images.
+  poster_url  String?
+  /// Display order in the product gallery — lowest first.
+  position    Int      @default(0)
+
+  @@index([product_id])
+}
+
+/// Customer orders. Minimal by design — this is the FK anchor that lets
+/// `store_reviews` prove a "verified purchase" without a full checkout/payment
+/// flow, which is out of scope here.
+model orders {
+  id          String            @id @default(uuid(7))
+  user_id     String
+  user        users             @relation(fields: [user_id], references: [id])
+  /// "pending" (payment screenshot submitted, awaiting admin verification) |
+  /// "processing" (admin confirmed) | "shipped" | "delivered" | "cancelled"
+  /// (admin rejected — stock is returned).
+  status      String            @default("pending")
+  /// Grand total the customer paid: items + shipping_cost.
+  total_price Decimal
+  created_at  TimestamptzString @default(now())
+
+  /// Client-generated UUID per checkout attempt; (user_id, idempotency_key) is
+  /// unique so a double-click / retry can never create a second order.
+  idempotency_key String?
+  contact_email   String            @default("")
+  contact_phone   String?
+  /// Shipping address snapshot (the shared `Address` shape) — later address-book
+  /// edits never rewrite history. Validated by Zod on write, never queried by field.
+  ship_address    Json
+  /// "First Last" copied from ship_address at placement — exists only so the admin
+  /// orders search can `ilike` it (JSON fields aren't filterable through the ORM).
+  customer_name   String            @default("")
+  /// "standard" | "express" | "next-day" — see shippingCostMinor in contracts.
+  shipping_method String            @default("standard")
+  shipping_cost   Decimal           @default("0")
+  /// JazzCash payment proof (Cloudinary "payment" folder) and when it arrived.
+  payment_screenshot_url String?
+  payment_submitted_at   TimestamptzString?
+
+  order_items order_items[]
+  events      order_events[]
+  reviews     store_reviews[]
+
+  @@index([user_id])
+  @@index([user_id, idempotency_key], unique: true, name: "orders_user_idempotency_key")
+}
+
+/// Line items of an order — snapshots price/size/color at time of purchase so
+/// later catalogue edits never rewrite order history.
+model order_items {
+  id         String   @id @default(uuid(7))
+  order_id   String
+  order      orders   @relation(fields: [order_id], references: [id])
+  product_id String
+  product    products @relation(fields: [product_id], references: [id])
+  quantity   Int
+  /// Price at time of purchase — never re-read from products.price.
+  price      Decimal
+  size       String?
+  color      String?
+
+  @@index([order_id])
+  @@index([product_id])
+}
+
+/// Status history of an order — one row per transition (the first is "pending" at
+/// placement). Drives the customer's payment/fulfilment timeline.
+model order_events {
+  id         String            @id @default(uuid(7))
+  order_id   String
+  order      orders            @relation(fields: [order_id], references: [id])
+  status     String
+  created_at TimestamptzString @default(now())
+
+  @@index([order_id])
+}
+
+/// Store reviews — rating + comment, gated behind a purchased order.
+/// Thrift-shop stock is one-off (no restocking), so reviews aren't scoped to a
+/// product page — they're store-wide, and one per order regardless of how
+/// many line items it contains (a 3-product order still gets a single review).
+model store_reviews {
+  id         String            @id @default(uuid(7))
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  /// References orders.id — proves this reviewer purchased this order.
+  order_id   String
+  order      orders            @relation(fields: [order_id], references: [id])
+  /// 1-5, validated by review.schema.ts.
+  rating     Int
+  comment    String
+  created_at TimestamptzString @default(now())
+
+  media      review_media[]
+
+  /// One review per order — stops re-reviewing the same purchase.
+  @@unique([user_id, order_id])
+}
+
+/// Tracks who uploaded a not-yet-submitted review attachment. Written at
+/// upload time (before the review exists) so `DELETE /media/review-upload`
+/// can check ownership instead of letting any signed-in user delete any
+/// review-folder URL they can guess. Cleared once the URL is attached to a
+/// real `store_reviews` row (see createReviewService) or deleted directly.
+model review_media_uploads {
+  id         String            @id @default(uuid(7))
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  url        String
+  created_at TimestamptzString @default(now())
+
+  @@unique([url])
+  @@index([user_id])
+}
+
+/// Photos/video a reviewer attaches to their review (thrift-shop condition proof).
+model review_media {
+  id        String        @id @default(uuid(7))
+  review_id String
+  review    store_reviews @relation(fields: [review_id], references: [id])
+  /// "image" | "video".
+  type      String
+  url       String
+
+  @@index([review_id])
+}
+/// Per-user cart items. id is UUIDv7 for time-ordered inserts and fast range queries.
+/// Uniqueness is enforced at the service layer to handle nullable size/color correctly.
+model cart_items {
+  /// UUIDv7 primary key — generated client-side via uuidv7() from uuid.util.ts.
+  id         String            @id @default(uuid(7))
+  /// Ownership verified at the service layer.
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  product_id String
+  product    products          @relation(fields: [product_id], references: [id])
+  quantity   Int
+  size       String?
+  color      String?
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  added_at   TimestamptzString @default(now())
+
+  @@index([user_id])
+}
+
+/// Per-user wishlist items. id is UUIDv7 for time-ordered inserts.
+model wishlist_items {
+  /// UUIDv7 primary key — generated client-side via uuidv7() from uuid.util.ts.
+  id         String            @id @default(uuid(7))
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  product_id String
+  product    products          @relation(fields: [product_id], references: [id])
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  added_at   TimestamptzString @default(now())
+
+  @@unique([user_id, product_id])
+  @@index([user_id])
+}
+
+/// Registered application users.
+///
+/// - Passwords are stored as bcrypt hashes (SALT_ROUNDS = 12) — never expose `password_hash` to the client.
+/// - `email` is stored lower-cased and enforced unique at the database level.
+/// - `id` is generated client-side via `crypto.randomUUID()` (UUIDv4).
+/// - `created_at` is populated with `nowUtc()` from `datetime.util.ts`; cast to `any` to satisfy the
+///   `TimestamptzString` branded type required by the ORM.
+model users {
+  /// UUIDv4 primary key — generated client-side, not by the database.
+  id            String            @id @default(uuid(4))
+  first_name    String
+  last_name     String
+  /// Lower-cased on write; unique constraint prevents duplicate accounts.
+  email         String            @unique
+  /// bcrypt hash — never return this field to the client (AuthUser type intentionally omits it).
+  password_hash String
+  /// Optional phone number stored as-entered; no normalisation is applied.
+  phone_number  String
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts, never new Date() directly.
+  created_at    TimestamptzString @default(now())
+
+  addresses             addresses[]
+  orders                orders[]
+  store_reviews         store_reviews[]
+  cart_items            cart_items[]
+  wishlist_items        wishlist_items[]
+  password_reset_tokens password_reset_tokens[]
+  review_media_uploads  review_media_uploads[]
+}
+
+/// Admin dashboard operators — deliberately separate from `users` (customers)
+/// so admin credentials never share a table, id space, or auth scope with
+/// customer accounts.
+///
+/// - Passwords are bcrypt hashes (SALT_ROUNDS = 12) — never expose `password_hash` to the client.
+/// - `email` is stored lower-cased and enforced unique at the database level.
+/// - `id` is generated client-side via `crypto.randomUUID()` (UUIDv4).
+/// - There is no signup endpoint for this table. Rows are created/updated exclusively by
+///   `pnpm run seed:admin` (see apps/api/scripts/seed-admin.ts) — the same script doubles as the
+///   credential-recovery path: change ADMIN_EMAIL/ADMIN_PASSWORD in .env and re-run it.
+model admin_users {
+  /// UUIDv4 primary key — generated client-side, not by the database.
+  id            String            @id @default(uuid(4))
+  name          String
+  /// Lower-cased on write; unique constraint prevents duplicate accounts.
+  email         String            @unique
+  /// bcrypt hash — never return this field to the client (AdminUser type intentionally omits it).
+  password_hash String
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  created_at    TimestamptzString @default(now())
+  /// Bumped on every credential reset — lets an operator see when the password last changed.
+  updated_at    TimestamptzString @default(now())
+}
+
+/// Saved shipping/billing addresses for a user.
+///
+/// - Owned by `user_id` — enforced at the application layer (service verifies ownership before delete).
+/// - `label` is optional; clients may supply "Home", "Work", etc.
+/// - `id` is generated client-side via `crypto.randomUUID()`.
+model addresses {
+  /// UUIDv4 primary key — generated client-side.
+  id         String            @id @default(uuid(4))
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  /// Optional human-readable label, e.g. "Home" or "Work".
+  label      String?
+  first_name String
+  last_name  String
+  line1      String
+  line2      String?
+  city       String
+  postcode   String
+  country    String
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  created_at TimestamptzString @default(now())
+}
+
+/// Messages submitted via the public contact-us form.
+///
+/// - Public write — no user_id; the submitter is not required to be authenticated.
+/// - id is UUIDv7 for time-ordered inserts, so the future admin dashboard can page
+///   through messages in submission order without a separate index.
+/// - `status` tracks the dashboard workflow ("new" | "read" | "replied"); defaults to "new".
+model contact_messages {
+  /// UUIDv7 primary key — generated client-side via uuidv7() from uuid.util.ts.
+  id         String            @id @default(uuid(7))
+  name       String
+  phone      String
+  email      String
+  subject    String
+  message    String
+  /// Dashboard workflow status — "new" | "read" | "replied".
+  status     String            @default("new")
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  created_at TimestamptzString @default(now())
+}
+
+/// Single-use password reset tokens.
+///
+/// - `token_hash` is the SHA-256 hex digest of the raw token sent in the reset email URL.
+///   The raw token never touches the database — only its hash is stored here.
+/// - `expires_at` is 1 hour after creation; the service rejects tokens past this point.
+/// - `used_at` is stamped on first consumption; subsequent use of the same token is rejected.
+/// - All existing tokens for a user are deleted before a new one is inserted, limiting accumulation.
+model password_reset_tokens {
+  /// UUIDv4 primary key.
+  id         String             @id @default(uuid(4))
+  user_id    String
+  user       users              @relation(fields: [user_id], references: [id])
+  /// SHA-256 hex digest of the raw reset token. UNIQUE prevents hash collisions from being exploitable.
+  token_hash String             @unique
+  /// UTC expiry timestamp — 1 hour after created_at.
+  expires_at TimestamptzString
+  /// Populated on first use. A non-null value means the token is consumed and must be rejected.
+  used_at    TimestamptzString?
+  created_at TimestamptzString  @default(now())
+}
+
+/// Singleton row (id = "default") holding the admin-editable JazzCash details
+/// shown at checkout and in order emails. Lives in the DB (not a file) so it
+/// survives redeploys and is shared by every API instance. No row = not set up.
+model payment_settings {
+  id             String            @id
+  account_name   String
+  account_number String
+  support_phone  String
+  /// Cloudinary URL of the QR image ("payment-qr" folder); empty = none.
+  qr_image       String            @default("")
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  updated_at     TimestamptzString @default(now())
+}
+
+/// Admin-editable page copy (home, about, contact, blog, condition guide), one row
+/// per page keyed by `key`. Lives in the DB — not on disk — so admin edits survive
+/// redeploys/container recreation and are shared by every API instance. `data` is
+/// the whole page document, validated by the matching Zod schema in
+/// `@ecommerce/contracts` on write. No row = the bundled defaults in
+/// `src/content/*.json` are served until an admin first saves.
+model site_content {
+  /// "home" | "about" | "contact" | "blog" | "condition-guide".
+  key        String            @id
+  data       Json
+  /// UTC timestamp — always use nowUtc() from datetime.util.ts.
+  updated_at TimestamptzString @default(now())
+}
+

@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "title": "About Us — {{storeName}}",
+    "description": "Learn about {{storeName}} — our story, our values, and the team behind the brand."
+  },
+  "story": {
+    "eyebrow": "Our Story",
+    "heading": ["Passion for Style,", "Built on Trust"],
+    "paragraphs": [
+      "{{storeName}} was founded with a single belief: great fashion should be accessible to everyone. What began as a small boutique in 2009 has grown into an internationally recognised destination for premium footwear and contemporary fashion.",
+      "We work directly with the world's best brands and independent designers to bring you an edit of products that balance craftsmanship, style, and value. Every collection is carefully curated — nothing makes it to our floor unless it meets our standard."
+    ],
+    "cta": "Shop the Collection",
+    "sinceYear": 2009,
+    "tagline": "Premium footwear & fashion, trusted worldwide",
+    "imageUrl": "https://placehold.co/1600x900/webp?text=Replace+me"
+  },
+  "stats": [
+    {
+      "value": "15+",
+      "label": "Years in Business"
+    },
+    {
+      "value": "10K+",
+      "label": "Products Available"
+    },
+    {
+      "value": "50+",
+      "label": "Countries Served"
+    },
+    {
+      "value": "98%",
+      "label": "Customer Satisfaction"
+    }
+  ],
+  "valuesHeading": "What We Stand For",
+  "values": [
+    {
+      "icon": "Award",
+      "title": "Premium Quality",
+      "body": "Every product in our catalogue is held to the highest standards. We work exclusively with verified suppliers and conduct rigorous quality checks before any item reaches our shelves."
+    },
+    {
+      "icon": "Sparkles",
+      "title": "Modern Innovation",
+      "body": "We stay ahead of trends so you don't have to. Our buying team travels globally to source the latest styles and bring fresh collections to our customers every season."
+    },
+    {
+      "icon": "Leaf",
+      "title": "Sustainable Approach",
+      "body": "We are committed to reducing our environmental footprint — from eco-conscious packaging to partnering with brands that share our values around responsible production."
+    }
+  ],
+  "whyChoose": {
+    "heading": "Why {{storeName}}",
+    "body": "We believe the shopping experience should be as enjoyable as the products themselves. That's why we've built a platform focused on trust, quality, and genuine service.",
+    "items": [
+      {
+        "icon": "ShieldCheck",
+        "title": "Verified Authenticity",
+        "body": "Every product is sourced directly from official brand partners. You'll never find a counterfeit on our shelves."
+      },
+      {
+        "icon": "Globe",
+        "title": "Worldwide Delivery",
+        "body": "We ship to over 50 countries with tracked, insured delivery and hassle-free returns on every order."
+      },
+      {
+        "icon": "Users",
+        "title": "Expert Team",
+        "body": "Our knowledgeable team is available seven days a week to help you find exactly what you're looking for."
+      }
+    ]
+  },
+  "cta": {
+    "heading": "Ready to Shop",
+    "body": "Explore our latest arrivals and find your next favourite piece. Free standard shipping on orders over Rs 10000.",
+    "primaryCta": "Shop Now",
+    "secondaryCta": "Contact Us"
+  }
+}

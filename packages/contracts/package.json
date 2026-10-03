@@ -1,0 +1,28 @@
+{
+  "name": "@ecommerce/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./product": "./src/product.ts",
+    "./cart": "./src/cart.ts",
+    "./order": "./src/order.ts",
+    "./customer": "./src/customer.ts",
+    "./ui": "./src/ui.ts",
+    "./auth": "./src/auth.ts",
+    "./filter-option": "./src/filter-option.ts",
+    "./schemas": "./src/schemas/auth.schema.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "7.0.2"
+  },
+  "dependencies": {
+    "zod": "^4.6.2"
+  },
+  "license": "MIT"
+}

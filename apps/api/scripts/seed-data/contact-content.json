@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "title": "Contact Us \u2014 {{storeName}}",
+    "description": "Get in touch with the {{storeName}} team. We're here to help with orders, products, and any questions."
+  },
+  "heading": "Contact Us",
+  "getInTouch": {
+    "heading": "Get In Touch",
+    "body": "Have a question about an order, a product, or anything else? Fill in the form or reach us directly using the details below \u2014 we're happy to help."
+  },
+  "formHeading": "Send Us a Message",
+  "info": [
+    {
+      "icon": "MapPin",
+      "label": "Visit Us",
+      "lines": ["12 Fashion Street", "London, EC1A 1BB", "United Kingdom"]
+    },
+    {
+      "icon": "Phone",
+      "label": "Call Us",
+      "lines": ["(+44) 800 123 456", "Mon \u2013 Fri, 9 am \u2013 6 pm"]
+    },
+    {
+      "icon": "Mail",
+      "label": "Email Us",
+      "lines": ["support@james.com", "We reply within 24 hours"]
+    },
+    {
+      "icon": "Clock",
+      "label": "Opening Hours",
+      "lines": [
+        "Mon \u2013 Fri: 9 am \u2013 6 pm",
+        "Sat: 10 am \u2013 4 pm",
+        "Sun: Closed"
+      ]
+    }
+  ]
+}

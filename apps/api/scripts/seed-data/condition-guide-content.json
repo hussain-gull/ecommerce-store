@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "label": "PREMIUM +",
+      "description": "Item is brand new and hasn't been worn before."
+    },
+    {
+      "label": "PREMIUM",
+      "description": "Item is in almost brand-new condition."
+    },
+    {
+      "label": "EXCELLENT",
+      "description": "Item has very little signs of wear."
+    },
+    {
+      "label": "VERY GOOD",
+      "description": "Item has visible signs of wear and use."
+    }
+  ]
+}

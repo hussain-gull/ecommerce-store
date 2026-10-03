@@ -1,0 +1,67 @@
+[
+  {
+    "id": "column.public.orders.ship_address",
+    "label": "Add column \"ship_address\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_address",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_address\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_address"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_address\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_address\" json"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_address\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_address"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.orders-ship-address-backfill",
+    "label": "Data transform: backfill orders.ship_address from ship_* columns",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Backfill orders.ship_address",
+        "sql": "UPDATE \"public\".\"orders\" SET \"ship_address\" = jsonb_strip_nulls(jsonb_build_object('firstName', \"ship_first_name\", 'lastName', \"ship_last_name\", 'line1', \"ship_line1\", 'line2', NULLIF(\"ship_line2\", ''), 'city', \"ship_city\", 'postcode', \"ship_postcode\", 'country', \"ship_country\"))::json WHERE \"ship_address\" IS NULL",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Every order now has ship_address",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM \"public\".\"orders\" WHERE \"ship_address\" IS NULL) AS ok",
+        "params": []
+      }
+    ]
+  }
+]

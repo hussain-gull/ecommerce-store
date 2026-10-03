@@ -1,0 +1,629 @@
+[
+  {
+    "id": "column.public.orders.contact_email",
+    "label": "Add column \"contact_email\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "contact_email",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"contact_email\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "contact_email"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"contact_email\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"contact_email\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"contact_email\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "contact_email"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.contact_phone",
+    "label": "Add column \"contact_phone\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "contact_phone",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"contact_phone\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "contact_phone"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"contact_phone\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"contact_phone\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"contact_phone\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "contact_phone"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.idempotency_key",
+    "label": "Add column \"idempotency_key\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "idempotency_key",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"idempotency_key\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "idempotency_key"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"idempotency_key\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"idempotency_key\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"idempotency_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "idempotency_key"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.payment_screenshot_url",
+    "label": "Add column \"payment_screenshot_url\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "payment_screenshot_url",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"payment_screenshot_url\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "payment_screenshot_url"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"payment_screenshot_url\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"payment_screenshot_url\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"payment_screenshot_url\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "payment_screenshot_url"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.payment_submitted_at",
+    "label": "Add column \"payment_submitted_at\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "payment_submitted_at",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"payment_submitted_at\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "payment_submitted_at"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"payment_submitted_at\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"payment_submitted_at\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"payment_submitted_at\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "payment_submitted_at"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_city",
+    "label": "Add column \"ship_city\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_city",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_city\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_city"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_city\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_city\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_city\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_city"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_country",
+    "label": "Add column \"ship_country\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_country",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_country\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_country"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_country\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_country\" text DEFAULT 'Pakistan' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_country\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_country"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_first_name",
+    "label": "Add column \"ship_first_name\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_first_name",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_first_name\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_first_name"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_first_name\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_first_name\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_first_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_first_name"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_last_name",
+    "label": "Add column \"ship_last_name\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_last_name",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_last_name\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_last_name"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_last_name\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_last_name\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_last_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_last_name"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_line1",
+    "label": "Add column \"ship_line1\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_line1",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_line1\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line1"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_line1\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_line1\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_line1\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line1"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_line2",
+    "label": "Add column \"ship_line2\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_line2",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_line2\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line2"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_line2\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_line2\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_line2\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_line2"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.ship_postcode",
+    "label": "Add column \"ship_postcode\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ship_postcode",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ship_postcode\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_postcode"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ship_postcode\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"ship_postcode\" text DEFAULT '' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ship_postcode\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "ship_postcode"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.shipping_cost",
+    "label": "Add column \"shipping_cost\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "shipping_cost",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"shipping_cost\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "shipping_cost"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"shipping_cost\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"shipping_cost\" numeric DEFAULT '0'::numeric NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"shipping_cost\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "shipping_cost"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.orders.shipping_method",
+    "label": "Add column \"shipping_method\" to \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "shipping_method",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"shipping_method\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "shipping_method"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"shipping_method\"",
+        "sql": "ALTER TABLE \"public\".\"orders\" ADD COLUMN \"shipping_method\" text DEFAULT 'standard' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"shipping_method\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "orders",
+          "shipping_method"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.orders.orders_user_idempotency_key_7e79ccf4",
+    "label": "Create index \"orders_user_idempotency_key_7e79ccf4\" on \"orders\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "orders_user_idempotency_key_7e79ccf4",
+        "table": "orders"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"orders_user_idempotency_key_7e79ccf4\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"orders_user_idempotency_key_7e79ccf4\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"orders_user_idempotency_key_7e79ccf4\"",
+        "sql": "CREATE UNIQUE INDEX \"orders_user_idempotency_key_7e79ccf4\" ON \"public\".\"orders\" (\"user_id\", \"idempotency_key\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"orders_user_idempotency_key_7e79ccf4\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"orders_user_idempotency_key_7e79ccf4\""
+        ]
+      }
+    ]
+  }
+]

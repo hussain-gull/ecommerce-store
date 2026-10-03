@@ -1,0 +1,239 @@
+[
+  {
+    "id": "data_migration.handle-nulls-product_variants-color_hex",
+    "label": "Data transform: handle-nulls-product_variants-color_hex",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check handle-nulls-product_variants-color_hex has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"color_hex\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run handle-nulls-product_variants-color_hex",
+        "sql": "UPDATE \"public\".\"product_variants\" SET \"color_hex\" = $1 WHERE \"color_hex\" IS NULL",
+        "params": [
+          "#000000"
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify handle-nulls-product_variants-color_hex resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"color_hex\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.product_variants.color_hex",
+    "label": "Set NOT NULL on \"product_variants\".\"color_hex\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "color_hex",
+        "table": "product_variants"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"color_hex\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "color_hex"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"color_hex\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"product_variants\" WHERE \"color_hex\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"color_hex\"",
+        "sql": "ALTER TABLE \"public\".\"product_variants\" ALTER COLUMN \"color_hex\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"color_hex\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "color_hex",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.handle-nulls-product_variants-color_name",
+    "label": "Data transform: handle-nulls-product_variants-color_name",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check handle-nulls-product_variants-color_name has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"color_name\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run handle-nulls-product_variants-color_name",
+        "sql": "UPDATE \"public\".\"product_variants\" SET \"color_name\" = $1 WHERE \"color_name\" IS NULL",
+        "params": [
+          "Black"
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify handle-nulls-product_variants-color_name resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"color_name\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.product_variants.color_name",
+    "label": "Set NOT NULL on \"product_variants\".\"color_name\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "color_name",
+        "table": "product_variants"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"color_name\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "color_name"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"color_name\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"product_variants\" WHERE \"color_name\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"color_name\"",
+        "sql": "ALTER TABLE \"public\".\"product_variants\" ALTER COLUMN \"color_name\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"color_name\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "color_name",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.handle-nulls-product_variants-size",
+    "label": "Data transform: handle-nulls-product_variants-size",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check handle-nulls-product_variants-size has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"size\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run handle-nulls-product_variants-size",
+        "sql": "UPDATE \"public\".\"product_variants\" SET \"size\" = $1 WHERE \"size\" IS NULL",
+        "params": [
+          "One size"
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify handle-nulls-product_variants-size resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"product_variants\" WHERE \"size\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.product_variants.size",
+    "label": "Set NOT NULL on \"product_variants\".\"size\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "size",
+        "table": "product_variants"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"size\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "size"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"size\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"product_variants\" WHERE \"size\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"size\"",
+        "sql": "ALTER TABLE \"public\".\"product_variants\" ALTER COLUMN \"size\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"size\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "product_variants",
+          "size",
+          "NO"
+        ]
+      }
+    ]
+  }
+]
