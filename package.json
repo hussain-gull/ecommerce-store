@@ -10,8 +10,8 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "prettier": "3.9.7",
-    "turbo": "^2.10.12",
+    "prettier": "3.9.9",
+    "turbo": "^2.11.7",
     "typescript": "7.0.2"
   },
   "packageManager": "pnpm@12.3.4",
